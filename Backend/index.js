@@ -9,7 +9,7 @@ const PORT = 3000;
 const filePath = path.join(__dirname, "command.bin");
 
 // Endpoint to serve the binary file
-app.get("/binaries", (req, res) => {
+app.get("/", (req, res) => {
   // Read the binary file
   fs.readFile(filePath, (err, data) => {
     if (err) {
