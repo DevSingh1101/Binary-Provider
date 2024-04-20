@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "server": "node ./Backend/server.js"
+    "server": "node ./Backend/server.js",
+    "build": "npm install"
   },
   "keywords": [],
   "author": "",
