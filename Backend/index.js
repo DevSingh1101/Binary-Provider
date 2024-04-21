@@ -1,9 +1,18 @@
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
+const multer = require("multer");
+const upload = multer({ dest: "uploads/" });
+const cors = require("cors");
 
 const app = express();
-const PORT = 3000;
+const PORT = 8000;
+const corsOptions = {
+  origin: "http://localhost:3000",
+};
+
+app.use(cors(corsOptions));
+app.use(express.urlencoded({ extended: false }));
 
 // Define the path to the binary file
 const filePath = path.join(__dirname, "command.bin");
@@ -27,6 +36,30 @@ app.get("/", (req, res) => {
     // Send the binary data
     res.send(data);
   });
+});
+
+// Endpoint to handle file upload
+app.post("/upload", upload.single("file"), (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: "No file uploaded" });
+    }
+
+    const fileContent = fs.readFileSync(req.file.path);
+
+    if (fs.existsSync(filePath)) {
+      fs.unlinkSync(filePath);
+    }
+
+    fs.writeFileSync(filePath, fileContent);
+
+    fs.unlinkSync(req.file.path);
+
+    res.status(200).json({ message: "File uploaded successfully" });
+  } catch (error) {
+    console.error("Error handling file upload:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
 });
 
 app.listen(PORT, () => {
