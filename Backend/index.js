@@ -3,15 +3,10 @@ const fs = require("fs");
 const path = require("path");
 const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
-const cors = require("cors");
 
 const app = express();
 const PORT = 8000;
-// const corsOptions = {
-//   origin: "http://localhost:3000",
-// };
 
-// app.use(cors(corsOptions));
 app.use(express.urlencoded({ extended: false }));
 
 // Define the path to the binary file
