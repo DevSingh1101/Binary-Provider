@@ -17,8 +17,10 @@ app.use(express.urlencoded({ extended: false }));
 // Define the path to the binary file
 const filePath = path.join(__dirname, "command.bin");
 
+app.use(express.static(path.resolve(__dirname, "../Frontend/build")));
+
 // Endpoint to serve the binary file
-app.get("/", (req, res) => {
+app.get("/download", (req, res) => {
     // Read the binary file
     fs.readFile(filePath, (err, data) => {
         if (err) {
@@ -60,6 +62,10 @@ app.post("/upload", upload.single("file"), (req, res) => {
         console.error("Error handling file upload:", error);
         res.status(500).json({ message: "Internal server error" });
     }
+});
+
+app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "../Frontend/build", "index.html"));
 });
 
 app.listen(PORT, () => {
